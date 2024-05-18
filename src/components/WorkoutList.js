@@ -1,12 +1,13 @@
 // src/components/WorkoutList.js
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
+import { collection, onSnapshot, doc, deleteDoc } from "firebase/firestore";
 
 const WorkoutList = () => {
   const [workouts, setWorkouts] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = db.collection('workouts').onSnapshot((snapshot) => {
+    const unsubscribe = onSnapshot(collection(db, 'workouts'), (snapshot) => {
       const workoutData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -18,7 +19,7 @@ const WorkoutList = () => {
   }, []);
 
   const deleteWorkout = async (id) => {
-    await db.collection('workouts').doc(id).delete();
+    await deleteDoc(doc(db, 'workouts', id));
   };
 
   return (

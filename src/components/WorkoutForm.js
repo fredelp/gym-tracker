@@ -1,6 +1,7 @@
 // src/components/WorkoutForm.js
 import React, { useState } from 'react';
 import { db } from '../firebase';
+import { collection, addDoc } from "firebase/firestore";
 
 const WorkoutForm = () => {
   const [day, setDay] = useState('Day 1');
@@ -11,7 +12,7 @@ const WorkoutForm = () => {
 
   const addWorkout = async (e) => {
     e.preventDefault();
-    await db.collection('workouts').add({
+    await addDoc(collection(db, 'workouts'), {
       day,
       exercise,
       sets,
